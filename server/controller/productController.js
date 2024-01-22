@@ -16,6 +16,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).array("Images", 5);
 
+
+// create new product
 exports.create = async (req, res) => {
     upload(req, res, async (error) => {
         if (error instanceof multer.MulterError) {
@@ -39,11 +41,7 @@ exports.create = async (req, res) => {
             const productImages = req.files.map(file => (file.filename));
 
             const product = new productDb({
-                name: req.body.name,
-                categoryId: req.body.categoryId,
-                price: req.body.price,
-                discount: req.body.discount,
-                specifications: req.body.specifications,
+                ...req.body,
                 images: productImages,
             });
 
@@ -64,12 +62,12 @@ exports.create = async (req, res) => {
     });
 };
 
-// upload 
+
+// update existing product
 exports.update = async (req, res) => {
     const id = req.params.id;
     let productImages;
     upload(req, {}, async (error) => {
-        // console.log(req.files)
 
         if (error instanceof multer.MulterError) {
             return res.status(400).json({ error: "image error" + error });
@@ -83,8 +81,8 @@ exports.update = async (req, res) => {
 
             }
             const product = await productDb.findById(id);
-            console.log("product",product)
-            // console.log(req.files)
+            console.log("product", product)
+
             if (!product) {
                 return res.status(400).send({ message: `error while updating product` });
 
@@ -103,7 +101,8 @@ exports.update = async (req, res) => {
     });
 }
 
-// find by category id
+
+// retrive products based its category
 exports.findByCategory = async (req, res) => {
     try {
         const categoryId = req.params.id;
@@ -123,17 +122,32 @@ exports.findByCategory = async (req, res) => {
         ]).exec();
         console.log(products);
 
-        // const product = products[0];
 
         res.status(200).json(products);
     } catch (error) {
-        // Handle errors, for example:
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
 
+// retrive single product
+exports.findProduct = async (req, res) => {
 
+    const id = req.params.id;
+    productDb.findById(id)
+        .then(data => {
+            if (!data) {
+                res.status(404).send({ message: `cannot find product with id` + id })
+            } else {
+                res.send(data);
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Internal server error'+ err });
+        })
+}
+
+// delete product
 exports.remove = async (req, res) => {
     const id = req.params.id;
     productDb.findByIdAndDelete(id)

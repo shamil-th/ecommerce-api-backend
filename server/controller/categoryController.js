@@ -40,8 +40,8 @@ exports.create = async (req, res) => {
         const categoryImg = req.file.path;
 
         const category = new categoryDb({
-            categoryImg: categoryImg,
-            categoryName: req.body.categoryName,
+            ...req.body,
+            categoryImg: categoryImg
         });
 
         category
