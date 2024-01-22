@@ -32,10 +32,14 @@ const upload = multer({storage : storage});
 app.use("/category", express.static(path.resolve(__dirname,"category")));
 app.use("/products", express.static(path.resolve(__dirname,"products")));
 
+// admin
 app.use('/admin', require('./server/routes/adminRouter'));
 app.use('/category', require('./server/routes/categoryRouter'));
 app.use('/products', require('./server/routes/productRouter'));
 
+// customer
+app.use('/customer',require('./server/routes/customerRoutes'));
+
 app.listen (PORT, ()=>{
-    console.log(`app is running on port http://localhost:${PORT}`)
+    console.log(`app is running on port http://localhost:${PORT}`);
 })

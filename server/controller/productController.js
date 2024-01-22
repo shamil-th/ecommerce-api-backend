@@ -76,12 +76,19 @@ exports.update = async (req, res) => {
         }
 
         try {
-            if (req.files) {
+            if (req.files.length>0) {
                 productImages = req.files.map(file => (file.filename));
+            } else {
+                const existingProduct = await productDb.findById(id);
+                if (!existingProduct) {
+                    return reject({ error: "Product not found" });
+                }
+                // Use the existing image path
+                productImages = existingProduct.images.map(image => (image));
 
             }
+
             const product = await productDb.findById(id);
-            console.log("product", product)
 
             if (!product) {
                 return res.status(400).send({ message: `error while updating product` });
@@ -112,22 +119,28 @@ exports.findByCategory = async (req, res) => {
                 $match: {
                     categoryId: categoryId
                 },
-                // $lookup :{
-                //     from : 'category',
-                //     localField : 'categoryId',
-                //     foreignField : '_id',
-                //     as : 'category'
-                // }
             }
         ]).exec();
-        console.log(products);
-
 
         res.status(200).json(products);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+}
+
+// retrive all products
+exports.findAllProducts = (req,res) => {
+    productDb.find()
+    .then(data=> {
+        if(!data){
+            res.status(404).send({message:`cannot find products`});
+        }else{
+            res.send(data)
+        }
+    }) .catch(err => {
+        res.status(500).json({error:'Internal server error'+err});
+    })
 }
 
 // retrive single product
