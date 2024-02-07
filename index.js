@@ -39,7 +39,9 @@ app.use('/products', require('./server/routes/productRouter'));
 
 // customer
 app.use('/customer',require('./server/routes/customerRoutes'));
-app.use("/cart",require('./server/routes/cartRouter'))
+app.use("/cart",require('./server/routes/cartRouter'));
+// stripe
+app.use('/payment',require('./server/routes/stripeRouter'));
 
 app.listen (PORT, ()=>{
     console.log(`app is running on port http://localhost:${PORT}`);
