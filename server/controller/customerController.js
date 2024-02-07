@@ -67,7 +67,7 @@ exports.login = async (req, res) => {
         expiresIn: 86400
     });
 
-    res.status(200).send({ auth: true, token: token });
+    res.status(200).send({ auth: true, token: token, id:customer._id });
 }
    catch(err){
     console.error(err);

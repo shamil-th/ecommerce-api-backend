@@ -76,7 +76,7 @@ exports.update = async (req, res) => {
         }
 
         try {
-            if (req.files.length>0) {
+            if (req.files.length > 0) {
                 productImages = req.files.map(file => (file.filename));
             } else {
                 const existingProduct = await productDb.findById(id);
@@ -130,17 +130,17 @@ exports.findByCategory = async (req, res) => {
 }
 
 // retrive all products
-exports.findAllProducts = (req,res) => {
+exports.findAllProducts = (req, res) => {
     productDb.find()
-    .then(data=> {
-        if(!data){
-            res.status(404).send({message:`cannot find products`});
-        }else{
-            res.send(data)
-        }
-    }) .catch(err => {
-        res.status(500).json({error:'Internal server error'+err});
-    })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({ message: `cannot find products` });
+            } else {
+                res.send(data)
+            }
+        }).catch(err => {
+            res.status(500).json({ error: 'Internal server error' + err });
+        })
 }
 
 // retrive single product
@@ -156,7 +156,7 @@ exports.findProduct = async (req, res) => {
             }
         })
         .catch(err => {
-            res.status(500).json({ error: 'Internal server error'+ err });
+            res.status(500).json({ error: 'Internal server error' + err });
         })
 }
 

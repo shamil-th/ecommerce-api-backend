@@ -106,53 +106,8 @@ exports.update = async (req, res) => {
         }
     });
 }
-// exports.update = async (req, res) => {
-//     const id = req.params.id;
 
-//     // Multer middleware for handling file uploads
-//     upload(req, {}, async (error) => {
-//         if (error instanceof multer.MulterError) {
-//             return res.status(400).json({ error: "image error " + error });
-//         } else if (error) {
-//             return res.status(500).json({ error: "server error" + error })
-//         }
-
-//         try {
-//             let categoryImg;
-
-//             if (req.file) {
-//                 console.log("image found", req.file.filename)
-//                 // Constructing the path for the uploaded image
-//                 categoryImg = path.join('categoryImg', req.file.filename);
-//             }
-
-//             // Fetch the category by ID
-//             const category = await categoryDb.findById(id);
-//             console.log(category)
-//             if (!category) {
-//                 return res.status(400).json({ error: `Category with ID ${id} not found. Unable to update.` });
-//             }
-            
-
-//             // Prepare updated data, including the new image path
-//             const updatedData = {
-//                 ...req.body,
-//                 categoryImg: categoryImg,
-//             }
-
-//             // Update the category in the database
-//             const updated = await categoryDb.findByIdAndUpdate(id, updatedData, { new: true });
-
-//             // Send the updated category as a response
-//             res.status(200).json(updated);
-//         } catch (err) {
-//             console.error(err);
-//             res.status(500).json({ error: "Server error" });
-//         }
-//     });
-// }
-
-
+// delte a category
 exports.remove = async (req, res) => {
     const id = req.params.id;
     categoryDb.findByIdAndDelete(id)
