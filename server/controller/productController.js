@@ -52,7 +52,7 @@ exports.create = async (req, res) => {
                 })
                 .catch(err => {
                     res.status(500).send({
-                        message: err.message || "Some error occurred during creating category",
+                        message: err.message || "Some error occurred during creating product",
                     });
                 });
         } catch (err) {
